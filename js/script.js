@@ -448,40 +448,214 @@ setTimeout(function () { $('#myModal').modal('hide'); }, 10000);
 })(window.jQuery);
 
 
-// POP ups JS
+// Premium New Site Redirect Popup Injection
+(function() {
+    "use strict";
 
-function popPage(){
-
-    const body = document.body;
-    const scrollPosition = window.scrollY;
-    const bodyStyle = window.getComputedStyle(body);
-    const originalOverflow = bodyStyle.overflow;
-
-    var page_wrapper = document.querySelector(".page-wrapper");
-    var popUp = document.querySelector("#popUp");
-    var cross = document.querySelector("#toggle");
-    var overlay = document.getElementById("overlay");
-
-    document.addEventListener("DOMContentLoaded",()=>{
-        if(!sessionStorage.getItem("#popUp")){
-            setTimeout(()=>{
-                overlay.style.display = "block";
-                popUp.style.display = "flex";
-            },4000);
-            sessionStorage.setItem("#popUp","true");
-            sessionStorage.setItem("#overlay","true");
+    function initNewSitePopup(newSiteUrl) {
+        // Prevent showing if already dismissed in this session
+        if (sessionStorage.getItem('new-site-popup-dismissed')) {
+            return;
         }
-    })
-    overlay.addEventListener('click',()=>{
-        overlay.style.display = "none";
-        popUp.style.display = "none";
-        body.style.overflow = originalOverflow;
-    });
-    cross.addEventListener("click",()=>{
-        overlay.style.display = "none";
-        popUp.style.display = "none";
-        body.style.overflow = originalOverflow;
-    });
-}
 
-// popPage();
+        // 1. Load Lucide Icons CDN
+        const lucideScript = document.createElement('script');
+        lucideScript.src = 'https://unpkg.com/lucide@latest';
+        lucideScript.onload = () => {
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        };
+        document.head.appendChild(lucideScript);
+
+        // 2. Inject Premium Styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .modern-redirect-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(10, 15, 30, 0.6);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                z-index: 999999;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.4s ease, visibility 0.4s ease;
+            }
+            .modern-redirect-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+            .modern-redirect-popup {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -45%) scale(0.92);
+                width: 90%;
+                max-width: 480px;
+                background: rgba(255, 255, 255, 0.98);
+                border: 2px solid #cbd5e1;
+                border-radius: 24px;
+                padding: 40px 32px 32px 32px;
+                box-shadow: none; /* Shadow removed per request */
+                z-index: 1000000;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                            transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                            visibility 0.5s ease;
+                font-family: 'Inter', 'Outfit', system-ui, -apple-system, sans-serif;
+                color: #1e293b;
+                text-align: center;
+            }
+            .modern-redirect-popup.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            .modern-redirect-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .modern-redirect-icon-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 64px;
+                height: 64px;
+                background: rgba(59, 130, 246, 0.1);
+                border-radius: 50%;
+                margin-bottom: 20px;
+                color: #1d4ed8;
+                animation: springy-bounce 2.5s infinite cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            @keyframes springy-bounce {
+                0%, 100% { transform: translateY(0) scale(1); }
+                50% { transform: translateY(-6px) scale(1.05); }
+            }
+            .modern-redirect-title {
+                font-size: 24px;
+                font-weight: 800;
+                color: #0f172a;
+                margin: 0 0 12px 0;
+                line-height: 1.25;
+                letter-spacing: -0.02em;
+            }
+            .modern-redirect-desc {
+                font-size: 15px;
+                line-height: 1.6;
+                color: #475569;
+                margin: 0 0 28px 0;
+            }
+            .modern-redirect-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+            }
+            .modern-redirect-btn-primary {
+                display: block;
+                width: 100%;
+                padding: 16px 24px;
+                border-radius: 14px;
+                font-size: 16px;
+                font-weight: 700;
+                text-decoration: none !important;
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+                box-shadow: none; /* Shadow removed per request */
+                transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                border: none;
+                cursor: pointer;
+                box-sizing: border-box;
+            }
+            .modern-redirect-btn-primary:hover {
+                transform: scale(1.04);
+            }
+            .modern-redirect-timer-text {
+                font-size: 13px;
+                color: #64748b;
+                margin-top: 16px;
+                margin-bottom: 0;
+                font-weight: 500;
+            }
+            body.modern-popup-active {
+                overflow: hidden;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 3. Inject Markup
+        const overlay = document.createElement('div');
+        overlay.className = 'modern-redirect-overlay';
+        overlay.id = 'modern-redirect-overlay';
+
+        const popup = document.createElement('div');
+        popup.className = 'modern-redirect-popup';
+        popup.id = 'modern-redirect-popup';
+        popup.innerHTML = `
+            <div class="modern-redirect-content">
+                <div class="modern-redirect-icon-container">
+                    <i data-lucide="sparkles" style="width: 32px; height: 32px;"></i>
+                </div>
+                <h3 class="modern-redirect-title">Our New Site is Ready!</h3>
+                <p class="modern-redirect-desc">We've launched a brand new, highly modernized, and upgraded web experience for IEEE-MSB. Check it out now!</p>
+                <div class="modern-redirect-buttons">
+                    <a href="${newSiteUrl}" id="modern-redirect-btn-primary" class="modern-redirect-btn-primary">Visit New Website</a>
+                </div>
+                <p id="modern-redirect-timer" class="modern-redirect-timer-text">You will be automatically redirected in 4 seconds...</p>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+        document.body.appendChild(popup);
+
+        // 4. Setup Auto-Redirection Timer with Countdown
+        let countdown = 4;
+        const timerText = document.getElementById('modern-redirect-timer');
+        
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                timerText.textContent = `You will be automatically redirected in ${countdown} seconds...`;
+            } else {
+                clearInterval(countdownInterval);
+                window.location.href = newSiteUrl;
+            }
+        }, 1000);
+
+        // 5. Setup Action Handlers
+        function showPopup() {
+            document.body.classList.add('modern-popup-active');
+            overlay.classList.add('active');
+            popup.classList.add('active');
+            // Refresh lucide icons in case script loaded late
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        }
+
+        // Trigger popup after a small delay
+        setTimeout(showPopup, 1500);
+
+        // Event listeners
+        document.getElementById('modern-redirect-btn-primary').addEventListener('click', (e) => {
+            e.preventDefault();
+            clearInterval(countdownInterval);
+            window.location.href = newSiteUrl;
+        });
+    }
+
+    // Initialize Popup when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            initNewSitePopup('https://ieee-msb.ieeenitb.com/');
+        });
+    } else {
+        initNewSitePopup('https://ieee-msb.ieeenitb.com/');
+    }
+})();

@@ -90,214 +90,10 @@
     }
 
 
-    /* Css for popUPs */
-    #toggle {
-        cursor: pointer;
-        left: 445px;
-    }
 
-    #toggle i {
-        z-index: 9999999;
-        position: absolute;
-        padding: 10px 8px;
-        width: 40px;
-        color: #000;
-        font-size: 30px;
-        right: 25px;
-    }
-
-    #popUp {
-        position: fixed;
-        top: 50%;
-        color: white;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        /* background: #000; */
-        display: flex;
-        /* flex-wrap: wrap; */
-        flex-direction: row;
-        width: 30%;
-        height: fit-content;
-        /* font-family: 'Autour One', cursive; */
-        display: none;
-        z-index: 1000;
-    }
-
-    #boxL {
-        padding: 4rem 2rem;
-        background: #3AAAFF;
-        color: white;
-        padding: 30px;
-        width: 95%;
-        height: 90%;
-        border-radius: 10px;
-    }
-
-    #disc {
-        font-size: 1.2rem;
-        color: white;
-        padding: 20px;
-        margin-top: 20px 0 20px 0;
-        text-align: center;
-    }
-
-    .imagebox {
-        display: flex;
-        align-items: center;
-        margin: 0.8rem 0;
-        /* width: 12rem; */
-        padding-bottom: 0;
-        /* border: 2px solid rebeccapurple; */
-        justify-content: center;
-    }
-
-    #mainWord {
-        color: rgb(247, 25, 25);
-        font-weight: 600;
-    }
-
-    #title {
-        text-align: center;
-        color: rgb(82, 4, 134);
-        /* border: 2px solid red; */
-        font-size: 1.3rem;
-        text-transform: uppercase;
-    }
-
-    #mainHeading {
-        text-align: center;
-        color: rgb(82, 4, 134);
-        /* border: 2px solid red; */
-        font-size: 1.6rem;
-        text-transform: uppercase;
-        font-weight: 700;
-    }
-
-    button {
-        border-radius: 5px;
-        background: white;
-        width: 10rem;
-        padding: 10px 20px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        margin: auto;
-        display: block;
-        /* border: 2px solid red; */
-    }
-
-    .imagebox img {
-        width: 130px;
-        /* padding-bottom: 1.2rem; */
-    }
-
-    .overlay {
-        display: none;
-        /* opacity: 0; */
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 999;
-        /* Ensure the overlay is above other content */
-        transition: opacity .3s;
-    }
-
-    #btn {
-        display: flex;
-        gap: 20px;
-        /* margin-top: 50px; */
-        padding-top: 8px;
-        /* border: 2px solid red; */
-    }
-
-    @media only screen and (max-width: 1200px) {
-        #disc {
-            font-size: 1rem;
-        }
-
-        #popUp {
-            flex-wrap: wrap;
-            width: 60%;
-            height: fit-content;
-            overflow: hidden;
-        }
-
-        #boxL {
-            width: 95%;
-            height: 90%;
-        }
-
-        .imagebox img {
-            width: 100px;
-            padding-bottom: 1.2rem;
-
-        }
-
-        button {
-            width: 10rem;
-        }
-    }
-
-    @media only screen and (max-width: 600px) {
-        .imagebox img {
-            width: 100px;
-            padding-bottom: 1.2rem;
-
-        }
-
-        .imagebox {
-            padding: 0;
-        }
-
-        #popUp {
-            /* flex-wrap: wrap; */
-            width: 90%;
-            height: fit-content;
-            overflow: hidden;
-            border-radius: 7.9px;
-            /* font-family: 'Anton', sans-serif; */
-        }
-
-        .imagebox {
-            font-size: 1.2rem;
-            padding: 10px;
-        }
-
-        #boxL {
-            width: 95%;
-            height: 90%;
-            border-radius: 8px;
-        }
-
-        button {
-            font-size: 1em;
-            width: 9rem;
-        }
-
-        #disc {
-            font-size: 1rem;
-        }
-
-    }
-
-    @media only screen and (max-width: 400px) {
-        #boxL {
-            height: 75%;
-            width: 98%;
-        }
-
-        button {
-            width: 8rem;
-        }
-    }
-</style>
 
 <body>
-    <div id="redirect-site-veil"
-        style="position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:#000;z-index:2147483647;margin:0;padding:0;"
-        aria-hidden="true"></div>
+
     <div class="page-wrapper">
         <header class=" main-header header-style-two">
             <!-- Header Lower -->
@@ -1479,11 +1275,9 @@
     </div>
     <!-- End Page Wrapper -->
 
-    <!-- Overlay Page -->
+    <!-- Legacy Popups disabled -->
+    <!--
     <div class="overlay" id="overlay"></div>
-    <!-- Overlay End -->
-
-    <!-- Pop UPs -->
     <div id="popUp">
         <span id="toggle">
             <i class="ri-close-line"></i>
@@ -1491,15 +1285,13 @@
         <div id="boxL">
             <p id="title">International IEEE Students' Conference SCEECS'24</p>
             <p class="imagebox"><img src="logo.png" alt=""></p>
-            <!-- <p id="mainHeading">Call For Papers</p> -->
             <p id="disc">🔍 Explore SCEECS'24 now!</p>
             <div id="btn">
-                <!-- <a href="https://sceecs.ieeenitb.com/callforpaper.html" target="_blank"><button>Call For Papers</button></a> -->
                 <a href="https://sceecs.ieeenitb.com/" target="_blank"><button>Sceecs'24</button></a>
             </div>
         </div>
     </div>
-    <!-- Pop UPs  End-->
+    -->
 
     <!--Scroll to top-->
     <div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-angle-up"></span></div>
